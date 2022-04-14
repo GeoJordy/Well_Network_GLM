@@ -1,5 +1,5 @@
 # Well_Network_GLM
-updated 04/14/2022
+last updated 04/14/2022
 
 A generalized linear model to be used in conjunction with Mann Kendall trend tests
 
