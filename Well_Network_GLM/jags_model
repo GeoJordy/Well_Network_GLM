@@ -1,0 +1,30 @@
+model{
+      # Likelihood -- for observed data
+      for (i in 1:n_d){
+        mu_d[i] <- beta1[Depth_d[i]] + beta2[Well_d[i]] + beta3[Well_d[i]]*Time_d[i]
+        Y_d[i] ~ dlnorm(
+          mu_d[i],
+          tauw[Well_d[i]]
+        )
+        # res_d[i] <- log(Y_d[i]) - mu_d[i] 
+      }
+      # Likelihood -- for unobserved data (i.e. non-detects)
+      for (i in 1:n_u){
+        ones[i] ~ dinterval(Z[i], DL_u[i,])
+        mu_u[i] <- beta1[Depth_u[i]] + beta2[Well_u[i]] + beta3[Well_u[i]]*Time_u[i]
+        Z[i] ~ dlnorm(
+          mu_u[i],
+          tauw[Well_u[i]]
+        )
+        # res_u[i] <- log(Z[i]) - mu_u[i]
+      }
+      for (i in 1:n_depths){
+        beta1[i] ~ dnorm(0, 0.001)
+      }
+      for (i in 1:n_wells){
+        beta2[i] ~ dnorm(0, 0.001)
+        beta3[i] ~ dnorm(0, 0.001)
+        tauw[i] <- pow(1/sigw[i], 2)
+        sigw[i] ~ dexp(0.001)
+      }
+    }
